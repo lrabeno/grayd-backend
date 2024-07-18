@@ -2,6 +2,8 @@ import express from 'express';
 import corsOptions from './config/corsOptions.js';
 import cors from 'cors';
 import employeeRouter from './routes/api/employees.js';
+import registerRouter from './routes/api/register.js';
+import authRouter from './routes/api/auth.js';
 
 const app = express();
 
@@ -16,6 +18,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use('/employees', employeeRouter);
+app.use('/register', registerRouter);
+app.use('/auth', authRouter);
+
 // app.get('/', (req, res) => {
 //   res.send('hello world');
 // });
