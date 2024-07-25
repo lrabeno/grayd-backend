@@ -7,12 +7,18 @@ import authRouter from './routes/api/auth.js';
 import refreshRouter from './routes/api/refresh.js';
 import logOutRouter from './routes/api/logout.js';
 import verifyJWT from './middleware/verifyJWT.js';
+import credentials from './middleware/credentials.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();
 
 const PORT = process.env.PORT || 3500;
 
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
 app.use(cors(corsOptions));
 
 // handles urlencoded data, typically for forms.

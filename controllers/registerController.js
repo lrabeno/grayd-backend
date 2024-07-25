@@ -13,7 +13,11 @@ const handleNewUser = async (req, res) => {
     //encrypt pw
     const hashedPwd = await bcrypt.hash(pwd, 10);
     // store new user
-    const newUser = { username: user, password: hashedPwd };
+    const newUser = {
+      username: user,
+      roles: { User: 2001 },
+      password: hashedPwd,
+    };
     usersDB.setUsers([...usersDB.users, newUser]);
   } catch (error) {
     res.status(500).json({ message: error.message });
