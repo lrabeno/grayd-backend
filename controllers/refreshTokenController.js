@@ -1,7 +1,4 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const handleRefreshToken = (req, res) => {
   const cookies = req.cookies;

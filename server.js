@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import corsOptions from './config/corsOptions.js';
 import cors from 'cors';
@@ -7,8 +8,15 @@ import authRouter from './routes/api/auth.js';
 import refreshRouter from './routes/api/refresh.js';
 import logOutRouter from './routes/api/logout.js';
 import verifyJWT from './middleware/verifyJWT.js';
-import credentials from './middleware/credentials.js';
 import cookieParser from 'cookie-parser';
+import credentials from './middleware/credentials.js';
+import mongoose from 'mongoose';
+import connectDB from './config/dbConn.js';
+
+dotenv.config();
+
+// Connect to MongoDb using mongoose
+connectDB();
 
 const app = express();
 
@@ -42,9 +50,18 @@ app.use('/employees', employeeRouter);
 //   res.send('hello world');
 // });
 
+/* 
+Mongo stuff
+
+mongodb+srv://lrabeno:r7WwrbrBJ6Sq7G3k@cluster0.u6k3g3d.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+*/
+
 app.use(function (err, req, res, next) {
   console.log(err.stack);
   res.status(500).send(err.message);
 });
 
-app.listen(PORT, () => console.log(`server running on port ${PORT}`));
+mongoose.connection.once('open', () => {
+  console.log('Connected to mongoDB!');
+  app.listen(PORT, () => console.log(`server running on port ${PORT}`));
+});
