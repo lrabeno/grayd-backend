@@ -1,8 +1,18 @@
-import data from '../model/Employee.js';
+import express from 'express';
+const router = express.Router();
 
-export const getAllEmployees = (req, res) => {
-  res.json(data.employees);
-};
+// router
+//   .route('/')
+//   .get(getAllEmployees)
+//   .post(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), createNewEmployee)
+//   .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), updateEmployee)
+//   .delete(verifyRoles(ROLES_LIST.Admin), deleteEmployee);
+
+// router.route('/:id').get(getEmployee);
+
+router.get('/', (req, res) => {
+  res.json('hiiii from employee');
+});
 
 export const createNewEmployee = (req, res) => {
   const newEmployee = {
@@ -71,3 +81,5 @@ export const getEmployee = (req, res) => {
   }
   res.json(employee);
 };
+
+export default router;
