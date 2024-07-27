@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   res.json('hiiii from employee');
 });
 
-export const createNewEmployee = (req, res) => {
+router.post('/', (req, res) => {
   const newEmployee = {
     id: data.employees?.length
       ? data.employees[data.employees.length - 1].id + 1
@@ -31,9 +31,10 @@ export const createNewEmployee = (req, res) => {
 
   data.setEmployees([...data.employees, newEmployee]);
   res.status(201).json(data.employees);
-};
+});
 
-export const updateEmployee = (req, res) => {
+// need :id?
+router.put('/', (req, res) => {
   const employee = data.employees.find(
     (emp) => emp.id === parseInt(req.body.id)
   );
@@ -52,9 +53,10 @@ export const updateEmployee = (req, res) => {
     unsortedArray.sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0))
   );
   res.json(data.employees);
-};
+});
 
-export const deleteEmployee = (req, res) => {
+// need :id?
+router.delete('/', (req, res) => {
   const employee = data.employees.find(
     (emp) => emp.id === parseInt(req.body.id)
   );
@@ -68,9 +70,9 @@ export const deleteEmployee = (req, res) => {
   );
   data.setEmployees([...filteredArray]);
   res.json(data.employees);
-};
+});
 
-export const getEmployee = (req, res) => {
+router.get('/:id', (req, res) => {
   const employee = data.employees.find(
     (emp) => emp.id === parseInt(req.params.id)
   );
@@ -80,6 +82,6 @@ export const getEmployee = (req, res) => {
       .json({ message: `Employee ID ${req.params.id} not found` });
   }
   res.json(employee);
-};
+});
 
 export default router;

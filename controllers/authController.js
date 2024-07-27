@@ -1,13 +1,18 @@
+import User from '../model/User.js';
+import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-const handleLogin = async (req, res) => {
+const router = express.Router();
+
+router.post('/', async (req, res) => {
   const { user, pwd } = req.body;
   if (!user || !pwd)
     return res
       .status(400)
       .json({ message: 'Username and password are required' });
-  const foundUser = usersDB.find((person) => person.username === user);
+  const foundUser = await User.findOne({ username: user }).exec();
+
   if (!user) return res.sendStatus(401); //Unauthorized
   // evaluate pw
   const match = await bcrypt.compare(pwd, foundUser.password);
@@ -22,30 +27,27 @@ const handleLogin = async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '30s' }
+      { expiresIn: '1d' }
     );
     const refreshToken = jwt.sign(
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: '1d' }
     );
-    const otherUsers = usersDB.users.filter(
-      (person) => person.username !== foundUser.username
-    );
-    // save token in DB with refreshToken
-    const currentUser = { ...foundUser, refreshToken };
-    usersDB.setUsers([...otherUsers, currentUser]);
-    // setting httpOnly to true makes refreshToken secure on front end and not accessible by javascript
+    // Saving refreshToken with current user
+    foundUser.refreshToken = refreshToken;
+    // update db
+    const result = foundUser.save();
+    console.log(result);
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
       sameSite: 'None',
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+      //secure: true,
+    }); //take out secure true for testing with postman, but need to be put back in
     res.json({ accessToken });
   } else {
     res.sendStatus(401);
   }
-};
+});
 
-export default handleLogin;
+export default router;
