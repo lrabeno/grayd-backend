@@ -1,4 +1,4 @@
-import data from '../model/employees.js';
+import data from '../model/Employee.js';
 
 export const getAllEmployees = (req, res) => {
   res.json(data.employees);
