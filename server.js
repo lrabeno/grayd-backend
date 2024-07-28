@@ -2,13 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import corsOptions from './config/corsOptions.js';
 import cors from 'cors';
-//import employeeRouter from './routes/api/employees.js';
-import registerRouter from './routes/api/register.js';
 import router from './routes/api/routes.js';
-import authRouter from './routes/api/auth.js';
-import refreshRouter from './routes/api/refresh.js';
-import logOutRouter from './routes/api/logout.js';
-import userRouter from './routes/api/users.js';
 import verifyJWT from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser';
 import credentials from './middleware/credentials.js';
@@ -24,9 +18,9 @@ const PORT = process.env.PORT || 3500;
 // Connect to MongoDb using mongoose
 connectDB();
 
-// app.get('/', (req, res) => {
-//   res.send('hello world');
-// });
+app.get('/', (req, res) => {
+  res.send('hello world');
+});
 
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
@@ -41,19 +35,15 @@ app.use(express.urlencoded({ extended: false }));
 // built in middleware for json
 app.use(express.json());
 
-app.use('/api', router);
 // middleware for cookies
-app.use(cookieParser);
+app.use(cookieParser());
 
-//app.use('/register', registerRouter);
-//app.use('/auth', authRouter);
-//app.use('/refresh', refreshRouter);
-//app.use('/logout', logOutRouter);
+app.use('/api', router);
 
 //putting this line here will ensure the employees route needs a JWT to access
 app.use(verifyJWT);
 //app.use('/employees', employeeRouter);
-app.use('/users', userRouter);
+//app.use('/users', userRouter);
 
 app.use(function (err, req, res, next) {
   console.log(err.stack);

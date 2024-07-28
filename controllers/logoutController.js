@@ -7,7 +7,10 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   // On front end delete the accessToken
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); // No content
+  if (!cookies?.jwt) {
+    console.log('logged out user');
+    return res.sendStatus(204);
+  } // No content
   const refreshToken = cookies.jwt;
 
   // Is refreshToken in thr DB?
@@ -19,8 +22,9 @@ router.get('/', async (req, res) => {
     max age does not need to be there and is 1 exception */
     res.clearCookie('jwt', {
       httpOnly: true,
-      sameSite: 'None',
-      secure: true,
+      //sameSite: 'None',
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
     });
     return res.sendStatus(204); //Forbidden
   }
@@ -31,7 +35,7 @@ router.get('/', async (req, res) => {
   console.log(result);
 
   // clear the jwt below
-  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None' }); //secure: true
   res.sendStatus(204);
 });
 

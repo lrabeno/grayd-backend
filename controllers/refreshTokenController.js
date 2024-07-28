@@ -6,7 +6,10 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(401);
+  if (!cookies?.jwt) {
+    console.log('hit 401 in refresh route');
+    return res.sendStatus(401);
+  }
 
   const refreshToken = cookies.jwt;
 
@@ -32,34 +35,5 @@ router.get('/', async (req, res) => {
     res.json({ accessToken });
   });
 });
-
-// const handleRefreshToken = async (req, res) => {
-//   const cookies = req.cookies;
-//   if (!cookies?.jwt) return res.sendStatus(401);
-
-//   const refreshToken = cookies.jwt;
-
-//   //checking the refresh token from cookie against the DB
-//   const foundUser = await User.findOne({ refreshToken }).exec()
-
-//   if (!foundUser) return res.sendStatus(403); //Forbidden
-//   // evaluate JWT
-//   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-//     if (err || foundUser.username !== decoded.username)
-//       return res.sendStatus(403);
-//     const roles = Object.values(foundUser.roles);
-//     const accessToken = jwt.sign(
-//       {
-//         UserInfo: {
-//           username: decoded.username,
-//           roles: roles,
-//         },
-//       },
-//       process.env.ACCESS_TOKEN_SECRET,
-//       { expiresIn: '30s' }
-//     );
-//     res.json({ accessToken });
-//   });
-// };
 
 export default router;

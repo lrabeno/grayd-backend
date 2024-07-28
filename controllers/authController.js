@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '1d' }
+      { expiresIn: '50s' }
     );
     const refreshToken = jwt.sign(
       { username: foundUser.username },
@@ -37,13 +37,13 @@ router.post('/', async (req, res) => {
     // Saving refreshToken with current user
     foundUser.refreshToken = refreshToken;
     // update db
-    const result = foundUser.save();
+    const result = await foundUser.save();
     console.log(result);
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
-      sameSite: 'None',
-      //secure: true,
-    }); //take out secure true for testing with postman, but need to be put back in
+      maxAge: 24 * 60 * 60 * 1000,
+    }); //take out secure: true for testing with postman, but need to be put back in
+    // take out sameSite: 'None', for testing with postman, but need to be put back in
     res.json({ accessToken });
   } else {
     res.sendStatus(401);

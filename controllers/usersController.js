@@ -1,13 +1,15 @@
 import User from '../model/User.js';
+import express from 'express';
 
-export const getAllUsers = async (req, res) => {
-  console.log('hit get route');
+const router = express.Router();
+
+router.get('/', async (req, res) => {
   const users = await User.find();
   if (!users) return res.status(204).json({ message: 'No users found' });
   res.json(users);
-};
+});
 
-export const deleteUser = async (req, res) => {
+router.delete('/', async (req, res) => {
   if (!req?.body?.id)
     return res.status(400).json({ message: 'User ID required' });
   const user = await User.findOne({ _id: req.body.id }).exec();
@@ -18,9 +20,8 @@ export const deleteUser = async (req, res) => {
   }
   const result = await user.deleteOne({ _id: req.body.id });
   res.json(result);
-};
-
-export const getUser = async (req, res) => {
+});
+router.get('/:id', async (req, res) => {
   if (!req?.params?.id)
     return res.status(400).json({ message: 'User ID required' });
   const user = await User.findOne({ _id: req.params.id }).exec();
@@ -30,4 +31,6 @@ export const getUser = async (req, res) => {
       .json({ message: `User ID ${req.params.id} not found` });
   }
   res.json(user);
-};
+});
+
+export default router;
