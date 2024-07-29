@@ -48,5 +48,3 @@ mongoose.connection.once('open', () => {
   console.log('Connected to mongoDB!');
   app.listen(PORT, () => console.log(`server running on port ${PORT}`));
 });
-
-//app.listen(PORT, () => console.log(`server running on port ${PORT}`));

@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   } // No content
   const refreshToken = cookies.jwt;
 
-  // Is refreshToken in thr DB?
+  // Is refreshToken in the DB?
   const foundUser = await User.findOne({ refreshToken }).exec();
 
   if (!foundUser) {

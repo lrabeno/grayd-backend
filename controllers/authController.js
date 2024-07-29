@@ -42,8 +42,7 @@ router.post('/', async (req, res) => {
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
-    }); //take out secure: true for testing with postman, but need to be put back in
-    // take out sameSite: 'None', for testing with postman, but need to be put back in
+    }); //take out secure: true for testing with postman/thunderclient, but need to be put back in
     res.json({ accessToken });
   } else {
     res.sendStatus(401);
