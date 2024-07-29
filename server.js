@@ -3,7 +3,6 @@ import express from 'express';
 import corsOptions from './config/corsOptions.js';
 import cors from 'cors';
 import router from './routes/api/routes.js';
-import verifyJWT from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser';
 import credentials from './middleware/credentials.js';
 import mongoose from 'mongoose';
@@ -39,11 +38,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api', router);
-
-//putting this line here will ensure the employees route needs a JWT to access
-app.use(verifyJWT);
-//app.use('/employees', employeeRouter);
-//app.use('/users', userRouter);
 
 app.use(function (err, req, res, next) {
   console.log(err.stack);

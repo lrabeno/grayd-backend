@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
   foundUser.refreshToken = '';
   // .save() saves to mongoDB document
   const result = await foundUser.save();
-  console.log(result);
+  console.log('from logout', result);
 
   // clear the jwt below
   res.clearCookie('jwt', { httpOnly: true, sameSite: 'None' }); //secure: true
